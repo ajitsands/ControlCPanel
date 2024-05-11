@@ -73,6 +73,7 @@ class ClassControlCpanel
         );
        
         $this->result = $this->CommonCURLRequest($query_params);
+        echo $this->result;
         $data = json_decode($result, true);
          // Access the value of 'reason' under 'data' array
         $reason = $data['cpanelresult']['data'][0]['reason'];
