@@ -68,8 +68,8 @@ class ClassControlCpanel
             'cpanel_jsonapi_module' => 'SubDomain',
             'cpanel_jsonapi_func' => 'delsubdomain',
             'cpanel_jsonapi_version' => 2,
-            'domain' => $subdomain.'.'.$domain,
-            'rootdomain' => $domain
+            'domain' => $this->subdomain.'.'.$this->domain,
+            'rootdomain' => $this->domain
         );
        
         $this->result = $this->CommonCURLRequest($query_params);
