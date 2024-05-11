@@ -13,6 +13,11 @@ class ClassControlCpanel
 
     }
 
+    public function RequestHandler()
+    {
+
+    }
+
     public function AddNewSubdomain()
     {
         $query_params = array(
@@ -25,7 +30,11 @@ class ClassControlCpanel
         );
         
         $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
+        $this-> CommonCURLRequest($query);
         
+    }
+    public function CommonCURLRequest($query)
+    {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_URL, $query);
@@ -52,7 +61,6 @@ class ClassControlCpanel
         echo "Reason: $reason\n";
         echo "Module: $module\n";
     }
-    
     
     
     
