@@ -80,10 +80,6 @@ class ClassControlCpanel
         // Return the JSON string
         return $JSONOut;
     }
-        
-    
-    
-    
     public function __destruct() {
        // echo "This is for Testing";
     }
