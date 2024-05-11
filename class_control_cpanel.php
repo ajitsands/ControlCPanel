@@ -73,20 +73,10 @@ class ClassControlCpanel
         );
        
         $this->result = $this->CommonCURLRequest($query_params);
-        echo $this->result;
-        // Decode the JSON response
-        $response_data = json_decode($this->result, true);
-
-        // Access the 'data' array
-        $data = $response_data['cpanelresult']['data'];
-
-        // Loop through each object in the 'data' array
-        foreach ($data as $item) {
-            // Access the 'result' and 'reason' values
-            $jsonresult = $item['result'];
-            $reason = $item['reason'];
-        }
-
+        $data = json_decode($result, true);
+         // Access the value of 'reason' under 'data' array
+        $reason = $data['cpanelresult']['data'][0]['reason'];
+        $jsonresult = $data['cpanelresult']['data'][0]['result'];
         echo $this->JSONResponse($jsonresult,$reason);
         
     }
