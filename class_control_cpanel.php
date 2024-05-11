@@ -27,6 +27,11 @@ class ClassControlCpanel
                 $this->ListOfSubdomain();
                 break;
             }
+            case 'DeleteSubdomain':
+            {
+                $this->DeleteSubdomain();
+                break;
+            }
             default:
             {
                 $this->JSONResponse(0,'No Action Found..!');
@@ -46,6 +51,25 @@ class ClassControlCpanel
             'domain' => $this->subdomain,
             'rootdomain' => $this->domain,
             'dir' => $this->directory
+        );
+       
+        $this->result = $this->CommonCURLRequest($query_params);
+        $data = json_decode($result, true);
+         // Access the value of 'reason' under 'data' array
+        $reason = $data['cpanelresult']['data'][0]['reason'];
+        $jsonresult = $data['cpanelresult']['data'][0]['result'];
+         
+        echo $this->JSONResponse($jsonresult,$reason);
+        
+    }
+    public function DeleteSubdomain()
+    {
+        $query_params = array(
+            'cpanel_jsonapi_module' => 'SubDomain',
+            'cpanel_jsonapi_func' => 'delsubdomain',
+            'cpanel_jsonapi_version' => 2,
+            'domain' => $subdomain.'.'.$domain,
+            'rootdomain' => $domain
         );
        
         $this->result = $this->CommonCURLRequest($query_params);
@@ -112,16 +136,11 @@ class ClassControlCpanel
     }
     public function JSONResponse($jsonresult, $reason)
     {
-        // Create an associative array to represent the JSON structure
         $response = array(
             "status" => $jsonresult,
             "message" => $reason
         );
-    
-        // Convert the associative array to JSON
         $JSONOut = json_encode($response);
-    
-        // Return the JSON string
         return $JSONOut;
     }
     public function __destruct() {
