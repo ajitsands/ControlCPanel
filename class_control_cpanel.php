@@ -72,7 +72,8 @@ class ClassControlCpanel
         
         $result = curl_exec($curl);
         if ($result === false) {
-            error_log("cURL error: " . curl_error($curl));
+            //error_log("cURL error: " . curl_error($curl));
+            echo $this->JSONResponse(0,"cURL error: " . curl_error($curl));
         } else {
 
             $data = json_decode($result, true);
@@ -82,6 +83,7 @@ class ClassControlCpanel
             $jsonresult = $data['cpanelresult']['data'][0]['result'];
             
            echo $this->JSONResponse($jsonresult,$reason);
+           echo $result;
         }
         curl_close($curl);
         
