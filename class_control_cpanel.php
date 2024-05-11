@@ -18,10 +18,21 @@ class ClassControlCpanel
         switch($action)
         {
             case 'AddNewSubdomain':
-                {
-                    $this->AddNewSubdomain();
-                    break;
-                }
+            {
+                $this->AddNewSubdomain();
+                break;
+            }
+            case 'ListOfSubdomain':
+            {
+                $this->ListOfSubdomain();
+                break;
+            }
+            default:
+            {
+                $this->JSONResponse(0,'No Action Found..!');
+                break;
+            }
+                
         }
 
     }
@@ -36,14 +47,24 @@ class ClassControlCpanel
             'rootdomain' => $this->domain,
             'dir' => $this->directory
         );
-        
-        $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
-        
-        $this->CommonCURLRequest($query);
+        $this->CommonCURLRequest($query_params);
         
     }
-    public function CommonCURLRequest($query)
+    public function ListOfSubdomain()
     {
+        $query_params = array(
+            'cpanel_jsonapi_module' => 'SubDomain',
+            'cpanel_jsonapi_func' => 'listsubdomains',
+            'cpanel_jsonapi_version' => 2,
+            'domain' => $domain
+        );
+        $this->CommonCURLRequest($query_params);
+        
+    }
+    public function CommonCURLRequest($query_params)
+    {
+        $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
+       
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_URL, $query);
