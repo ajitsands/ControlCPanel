@@ -16,7 +16,7 @@ class ClassControlCpanel
     
     
     public function __destruct() {
-        
+        echo "This is for Testing";
     }
 
 }
