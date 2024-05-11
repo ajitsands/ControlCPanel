@@ -54,17 +54,29 @@ class ClassControlCpanel
             error_log("cURL error: " . curl_error($curl));
         } else {
 
-            echo $result;
             $data = json_decode($result, true);
         
             // Access the value of 'reason' under 'data' array
             $reason = $data['cpanelresult']['data'][0]['reason'];
             $jsonresult = $data['cpanelresult']['data'][0]['result'];
             
-            // Output the values
-            echo "Reason: $reason\n";
-            echo "Result: $jsonresult\n";
+           echo $this->JSONResponse($jsonresult,$reason);
         }
+        function JSONResponse($jsonresult, $reason)
+        {
+            // Create an associative array to represent the JSON structure
+            $response = array(
+                "status" => $reason,
+                "message" => $jsonresult
+            );
+        
+            // Convert the associative array to JSON
+            $JSONOut = json_encode($response);
+        
+            // Return the JSON string
+            return $JSONOut;
+        }
+        
         
         curl_close($curl);
         
