@@ -3,7 +3,7 @@ include_once "settings.php";
 class ClassControlCpanel
 {
     
-    public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory;
+    public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result;
     public function __construct($action) {
         $this->cpanel_username = CPANELUSERNAME ;
         $this->cpanel_password = CPANELPASSWORD;
@@ -47,7 +47,14 @@ class ClassControlCpanel
             'rootdomain' => $this->domain,
             'dir' => $this->directory
         );
-        $this->CommonCURLRequest($query_params);
+       
+        $this->result = $this->CommonCURLRequest($query_params);
+        $data = json_decode($result, true);
+         // Access the value of 'reason' under 'data' array
+        $reason = $data['cpanelresult']['data'][0]['reason'];
+        $jsonresult = $data['cpanelresult']['data'][0]['result'];
+         
+        echo $this->JSONResponse($jsonresult,$reason);
         
     }
     public function ListOfSubdomain()
@@ -58,8 +65,19 @@ class ClassControlCpanel
             'cpanel_jsonapi_version' => 2,
             'domain' => $domain
         );
-        $this->CommonCURLRequest($query_params);
+        $this->result =  $this->CommonCURLRequest($query_params);
         
+            $data = json_decode($this->result, true);
+            if (isset($data['cpanelresult']['data'])) {
+                $subdomains = array_column($data['cpanelresult']['data'], 'domain');
+                foreach ($subdomains as $subdomain) {
+                    echo $subdomain . "<br>";
+                }
+            } else {
+                echo $this->JSONResponse(0,"No subdomains found.");
+            }
+
+
     }
     public function CommonCURLRequest($query_params)
     {
@@ -71,21 +89,15 @@ class ClassControlCpanel
         curl_setopt($curl, CURLOPT_USERPWD, "$this->cpanel_username:$this->cpanel_password");
         
         $result = curl_exec($curl);
+        curl_close($curl);
         if ($result === false) {
             //error_log("cURL error: " . curl_error($curl));
             echo $this->JSONResponse(0,"cURL error: " . curl_error($curl));
         } else {
 
-            $data = json_decode($result, true);
-        
-            // Access the value of 'reason' under 'data' array
-            $reason = $data['cpanelresult']['data'][0]['reason'];
-            $jsonresult = $data['cpanelresult']['data'][0]['result'];
-            
-           echo $this->JSONResponse($jsonresult,$reason);
-           echo $result;
+           return $result;
         }
-        curl_close($curl);
+        
         
        
     }
