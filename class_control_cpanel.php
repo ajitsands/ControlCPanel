@@ -53,15 +53,17 @@ class ClassControlCpanel
         if ($result === false) {
             error_log("cURL error: " . curl_error($curl));
         } else {
+
+            echo $result;
             $data = json_decode($result, true);
         
             // Access the value of 'reason' under 'data' array
             $reason = $data['cpanelresult']['data'][0]['reason'];
-            $result = $data['cpanelresult']['data'][0]['result'];
+            $jsonresult = $data['cpanelresult']['data'][0]['result'];
             
             // Output the values
             echo "Reason: $reason\n";
-            echo "Module: $module\n";
+            echo "Result: $jsonresult\n";
         }
         
         curl_close($curl);
