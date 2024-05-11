@@ -62,26 +62,25 @@ class ClassControlCpanel
             
            echo $this->JSONResponse($jsonresult,$reason);
         }
-        function JSONResponse($jsonresult, $reason)
-        {
-            // Create an associative array to represent the JSON structure
-            $response = array(
-                "status" => $reason,
-                "message" => $jsonresult
-            );
-        
-            // Convert the associative array to JSON
-            $JSONOut = json_encode($response);
-        
-            // Return the JSON string
-            return $JSONOut;
-        }
-        
-        
         curl_close($curl);
         
        
     }
+    public function JSONResponse($jsonresult, $reason)
+    {
+        // Create an associative array to represent the JSON structure
+        $response = array(
+            "status" => $reason,
+            "message" => $jsonresult
+        );
+    
+        // Convert the associative array to JSON
+        $JSONOut = json_encode($response);
+    
+        // Return the JSON string
+        return $JSONOut;
+    }
+        
     
     
     
