@@ -4,17 +4,25 @@ class ClassControlCpanel
 {
     
     public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory;
-    public function __construct() {
+    public function __construct($action) {
         $this->cpanel_username = CPANELUSERNAME ;
         $this->cpanel_password = CPANELPASSWORD;
         $this->subdomain = SUBDOMAIN;
         $this->domain = DOMAIN;
         $this->directory = DIRECTORY;
-
+        $this->RequestHandler($action); 
     }
 
-    public function RequestHandler()
+    public function RequestHandler($action)
     {
+        switch($action)
+        {
+            case 'AddNewSubdomain':
+                {
+                    $this->AddNewSubdomain();
+                    break;
+                }
+        }
 
     }
 
@@ -30,7 +38,8 @@ class ClassControlCpanel
         );
         
         $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
-        $this-> CommonCURLRequest($query);
+        
+        $this->CommonCURLRequest($query);
         
     }
     public function CommonCURLRequest($query)
@@ -69,7 +78,7 @@ class ClassControlCpanel
     }
 
 }
-
-$ccp = new ClassControlCpanel();
+$action = $_POST['action'];
+$ccp = new ClassControlCpanel($action);
 
 ?>
