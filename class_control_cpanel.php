@@ -81,8 +81,7 @@ class ClassControlCpanel
                     $jsonArray[] = $jsonElement;
                     $slno++;
                 }
-                $jsonOutput = json_encode($jsonArray, JSON_PRETTY_PRINT);
-                echo $this->JSONResponse(1,$jsonOutput);
+                echo $this->JSONResponse(1,$jsonArray);
             } else {
                 echo $this->JSONResponse(0,"No subdomains found.");
             }
