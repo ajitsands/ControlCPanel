@@ -66,13 +66,23 @@ class ClassControlCpanel
             'domain' => $domain
         );
         $this->result =  $this->CommonCURLRequest($query_params);
-        
+            $jsonArray = [];
+            $slno = 1;
+
             $data = json_decode($this->result, true);
+
             if (isset($data['cpanelresult']['data'])) {
                 $subdomains = array_column($data['cpanelresult']['data'], 'domain');
                 foreach ($subdomains as $subdomain) {
-                    echo $subdomain . "<br>";
+                    $jsonElement = [
+                        "slno" => $slno,
+                        "subdomainname" => $subdomain
+                    ];
+                    $jsonArray[] = $jsonElement;
+                    $slno++;
                 }
+                $jsonOutput = json_encode($jsonArray, JSON_PRETTY_PRINT);
+                echo $this->JSONResponse(1,$jsonOutput);
             } else {
                 echo $this->JSONResponse(0,"No subdomains found.");
             }
