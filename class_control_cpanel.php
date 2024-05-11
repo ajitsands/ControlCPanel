@@ -70,8 +70,8 @@ class ClassControlCpanel
     {
         // Create an associative array to represent the JSON structure
         $response = array(
-            "status" => $reason,
-            "message" => $jsonresult
+            "status" => $jsonresult,
+            "message" => $reason
         );
     
         // Convert the associative array to JSON
