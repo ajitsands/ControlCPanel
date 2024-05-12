@@ -3,7 +3,8 @@ include_once "settings.php";
 class ClassControlCpanel
 {
     
-    public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result,$database_name,$database_user,$database_user_password;
+    public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result;
+    public $database_name,$database_username,$database_user_password;
     public function __construct($action) {
         $this->cpanel_username = CPANELUSERNAME ;
         $this->cpanel_password = CPANELPASSWORD;
@@ -11,7 +12,7 @@ class ClassControlCpanel
         $this->domain = DOMAIN;
         $this->directory = DIRECTORY;
         $this->database_name = DBNAME;
-        $this->database_user = DBUSERNAME;
+        $this->database_username = DBUSERNAME;
         $this->database_user_password = DBUSERPASSWORD;
 
         $this->RequestHandler($action); 
@@ -155,7 +156,7 @@ class ClassControlCpanel
             'cpanel_jsonapi_module' => 'MysqlFE',
             'cpanel_jsonapi_func' => 'createdbuser',
             'cpanel_jsonapi_version' => 2,
-            'name' => $this->database_user,
+            'name' => $this->database_username,
             'password' => $this->database_user_password
         );
         $this->result = $this->CommonCURLRequest($query_params);
