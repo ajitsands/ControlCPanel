@@ -135,7 +135,11 @@ class ClassControlCpanel
             'db' => $this->database_name
         );
         $this->result = $this->CommonCURLRequest($query_params);
-        echo $this->result;
+        $response_data = json_decode($this->result, true);
+        $event_result = $response_data['cpanelresult']['event']['result'];
+        $function = $response_data['cpanelresult']['func'];
+
+        echo $this->JSONResponse($function,$event_result);
     }
     public function CommonCURLRequest($query_params)
     {
