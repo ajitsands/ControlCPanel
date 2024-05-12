@@ -152,11 +152,11 @@ class ClassControlCpanel
 
     public function CreateNewDatabaseUser()
     {
-        $query_params = array(
+       
+        $post_data = array(
             'cpanel_jsonapi_module' => 'MysqlFE',
             'cpanel_jsonapi_func' => 'createdbuser',
-            'cpanel_jsonapi_version' => 2,
-            'name' => $this->database_username,
+            'dbuser' => $this->database_username,
             'password' => $this->database_user_password
         );
         $this->result = $this->CommonCURLRequest($query_params);
