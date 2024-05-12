@@ -161,12 +161,15 @@ class ClassControlCpanel
             'password' => $this->database_user_password
         );
         $this->result = $this->CommonCURLRequest($query_params);
-        echo $this->result;
-        // $response_data = json_decode($this->result, true);
+        $response_data = json_decode($this->result, true);
+        
+        $event_result = $response_data['cpanelresult']['event']['result'];
+        $event_reason = $response_data['cpanelresult']['event']['reason'];
+
         // $event_result = $response_data['cpanelresult']['event']['result'];
         // $function = $response_data['cpanelresult']['func'];
 
-        // echo $this->JSONResponse($event_result,$function);
+        echo $this->JSONResponse($event_result,$event_reason);
     }
 
     public function CommonCURLRequest($query_params)
