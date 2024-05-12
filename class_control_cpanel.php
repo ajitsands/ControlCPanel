@@ -132,7 +132,7 @@ class ClassControlCpanel
             'cpanel_jsonapi_version' => 2,
             'db' => $database_name
         );
-        $this->result = $this->CreateNewDatabase($query_params);
+        $this->result = $this->CommonCURLRequest($query_params);
         echo $this->result;
     }
     public function CommonCURLRequest($query_params)
