@@ -299,7 +299,7 @@ class ClassControlCpanel
                  $query_params = array(
                     'cpanel_jsonapi_user' => $this->cpanel_username,
                     'cpanel_jsonapi_module' => 'MysqlFE',
-                    'cpanel_jsonapi_func' => 'sql',
+                    'cpanel_jsonapi_func' => 'runsql',
                     'db' => $database_name,
                     'file' => $sql_script_file
                 );
