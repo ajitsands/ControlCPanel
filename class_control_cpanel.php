@@ -209,35 +209,41 @@ class ClassControlCpanel
     public function DeployApplication()
     {
         // Move the zip file to the destination folder
-            if (copy($this->source_file, $this->destination_path.APPLICATIONFILENAME)) {
-                // Open the zip file
-                $zip = zip_open($this->destination_path.APPLICATIONFILENAME);
-                if ($zip) {
-                    // Extract each file from the zip
-                    while ($zip_entry = zip_read($zip)) {
-                        // Get the name of the file inside the zip
-                        $filename = zip_entry_name($zip_entry);
-                        // Create the destination directory if it doesn't exist
-                        $dirname = dirname($this->destination_path . $filename);
-                        if (!is_dir($dirname)) {
-                            mkdir($dirname, 0755, true);
-                        }
-                        // Extract the file
-                        if (zip_entry_open($zip, $zip_entry, "r")) {
-                            $file_content = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
-                            file_put_contents($this->destination_path . $filename, $file_content);
-                            zip_entry_close($zip_entry);
-                        }
+        if (copy($this->source_file, $this->destination_path . APPLICATIONFILENAME)) {
+            // Open the zip file
+            $zip = zip_open($this->destination_path . APPLICATIONFILENAME);
+            if ($zip) {
+                // Extract each file from the zip
+                while ($zip_entry = zip_read($zip)) {
+                    // Get the name of the file inside the zip
+                    $filename = zip_entry_name($zip_entry);
+                    // Create the destination directory if it doesn't exist
+                    $dirname = dirname($this->destination_path . $filename);
+                    if (!is_dir($dirname)) {
+                        mkdir($dirname, 0755, true);
                     }
-                    zip_close($zip);
-                    echo $this->JSONResponse('1',"Selected package installed successfully..!");
-                    
+                    // Extract the file
+                    if (zip_entry_open($zip, $zip_entry, "r")) {
+                        $file_content = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+                        file_put_contents($this->destination_path . $filename, $file_content);
+                        zip_entry_close($zip_entry);
+                    }
+                }
+                zip_close($zip);
+                
+                // Remove the zip file after extraction
+                if (unlink($this->destination_path . APPLICATIONFILENAME)) {
+                    echo $this->JSONResponse('1', "Selected package installed successfully..!");
                 } else {
-                    echo $this->JSONResponse('0',"Failed to open the zip file.");
+                    echo $this->JSONResponse('0', "Failed to remove the zip file after extraction.");
                 }
             } else {
-                echo $this->JSONResponse('0',"Failed to move the zip file.");
+                echo $this->JSONResponse('0', "Failed to open the zip file.");
             }
+        } else {
+            echo $this->JSONResponse('0', "Failed to move the zip file.");
+        }
+        
     }
 
     public function CommonCURLRequest($query_params)
