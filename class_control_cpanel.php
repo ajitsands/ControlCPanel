@@ -292,28 +292,29 @@ class ClassControlCpanel
     public function RunSQLScriptWithCPanel()
     {
 
-                // cPanel API 2 function to execute SQL script
-                $api2_function = 'MysqlFE::db_run_sql';
-
                 // Database connection settings
                 $database_name = DBNAME;
                 $sql_script_file = MYSQLSCRIPTPATH;
                 
-                // Construct the API call parameters
-                $api2_parameters = array(
+                 $query_params = array(
+                    'cpanel_jsonapi_user' => $this->cpanel_username,
+                    'cpanel_jsonapi_module' => 'MysqlFE',
+                    'cpanel_jsonapi_func' => 'db_run_sql',
                     'db' => $database_name,
                     'file' => $sql_script_file
                 );
 
-                // cPanel API 2 call
-                $api2_response = json_decode(cpanel_jsonapi2($api2_function, $api2_parameters), true);
-
+                $this->result = $this->CommonCURLRequest($query_params);
+                echo $this->result;
                 // Check if the API call was successful
                 if ($api2_response['cpanelresult']['data'][0]['status'] == 1) {
                     echo "SQL script executed successfully.";
                 } else {
                     echo "Error executing SQL script: " . $api2_response['cpanelresult']['data'][0]['statusmsg'];
                 }
+
+
+                
 
 
         
