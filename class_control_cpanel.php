@@ -47,6 +47,12 @@ class ClassControlCpanel
                 $this->CreateNewDatabaseUser();
                 break;
             }
+            case 'SetPrivilageToDBUser':
+            {
+                $this->SetPrivilageToDBUser();
+                break;
+            }
+            
             default:
             {
                 $this->JSONResponse(0,'No Action Found..!');
@@ -171,6 +177,30 @@ class ClassControlCpanel
 
         echo $this->JSONResponse($event_result,$event_reason);
     }
+
+    public function SetPrivilageToDBUser()
+    {
+       
+        $query_params = array(
+            'cpanel_jsonapi_module' => 'MysqlFE',
+            'cpanel_jsonapi_func' => 'setdbuserprivileges',
+            'cpanel_jsonapi_version' => 2,
+            'db' => $this->database_name,
+            'dbuser' => $this->database_username,
+            'privileges' => 'ALL PRIVILEGES'
+        );
+        $this->result = $this->CommonCURLRequest($query_params);
+        echo $this->result;
+        $response_data = json_decode($this->result, true);
+        $event_result = $response_data['cpanelresult']['event']['result'];
+        $event_reason = $response_data['cpanelresult']['event']['reason'];
+
+        // $event_result = $response_data['cpanelresult']['event']['result'];
+        // $function = $response_data['cpanelresult']['func'];
+
+        echo $this->JSONResponse($event_result,$event_reason);
+    }
+
 
     public function CommonCURLRequest($query_params)
     {
