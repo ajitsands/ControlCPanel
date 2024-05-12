@@ -341,7 +341,10 @@ class ClassControlCpanel
     public function RunSQLScriptMySQLiMethod()
     {
          // Database connection settings
-         
+        $servername = $this->servername;
+        $username = DBUSERNAME;
+        $password = DBUSERPASSWORD;
+        $dbname = DBNAME;
          $conn = new mysqli($servername, $username, $password, $dbname);
          if ($conn->connect_error) {
              die("Connection failed: " . $conn->connect_error);
