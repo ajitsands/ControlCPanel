@@ -298,7 +298,7 @@ class ClassControlCpanel
                 // Database connection settings
                 $database_name = DBNAME;
                 $sql_script_file = MYSQLSCRIPTPATH;
-
+                echo "DB Name : ".$database_name;
                 // Construct the API call parameters
                 $api2_parameters = array(
                     'db' => $database_name,
