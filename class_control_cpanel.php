@@ -160,6 +160,7 @@ class ClassControlCpanel
             'password' => $this->database_user_password
         );
         $this->result = $this->CommonCURLRequest($query_params);
+        echo $this->database_username;
         echo $this->result;
         // $response_data = json_decode($this->result, true);
         // $event_result = $response_data['cpanelresult']['event']['result'];
