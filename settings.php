@@ -4,5 +4,7 @@
     define('DOMAIN','sandslab.com');
     define('SUBDOMAIN',$_POST['subdomainname']);
     define('DIRECTORY','/public_html/'.SUBDOMAIN);
-    define('DBNAME',$_POST['dbname']);
+    define('DBNAMEPREFIX','sandsl23_');
+    define('DBNAME',DBNAMEPREFIX.$_POST['dbname']);
+   
 ?>
