@@ -32,6 +32,11 @@ class ClassControlCpanel
                 $this->DeleteSubdomain();
                 break;
             }
+            case 'CreateNewDatabase':
+            {
+                $this->CreateNewDatabase();
+                break;
+            }
             default:
             {
                 $this->JSONResponse(0,'No Action Found..!');
