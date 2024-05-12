@@ -11,6 +11,7 @@ class ClassControlCpanel
         $this->domain = DOMAIN;
         $this->directory = DIRECTORY;
         $this->database_name = DBNAME;
+        $this->database_user = DBUSERNAME;
         $this->database_user_password = DBUSERPASSWORD;
 
         $this->RequestHandler($action); 
