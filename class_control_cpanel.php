@@ -5,6 +5,7 @@ class ClassControlCpanel
     
     public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result;
     public $database_name,$database_username,$database_user_password;
+    public $source_file,$destination_path;
     public function __construct($action) {
         $this->cpanel_username = CPANELUSERNAME ;
         $this->cpanel_password = CPANELPASSWORD;
@@ -14,6 +15,8 @@ class ClassControlCpanel
         $this->database_name = DBNAME;
         $this->database_username = DBUSERNAME;
         $this->database_user_password = DBUSERPASSWORD;
+        $this->source_file = APPLICATIONSOURSE;
+        $this->destination_path = DESTINATIONPATH;
 
         $this->RequestHandler($action); 
     }
@@ -50,6 +53,11 @@ class ClassControlCpanel
             case 'SetPrivilageToDBUser':
             {
                 $this->SetPrivilageToDBUser();
+                break;
+            }
+            case 'DeployApplication':
+            {
+                $this->DeployApplication();
                 break;
             }
             
@@ -198,6 +206,39 @@ class ClassControlCpanel
         echo $this->JSONResponse($event_result,$event_reason);
     }
 
+    public function DeployApplication()
+    {
+        // Move the zip file to the destination folder
+            if (copy($this->source_file, $this->destination_path)) {
+                // Open the zip file
+                $zip = zip_open($this->destination_path);
+                if ($zip) {
+                    // Extract each file from the zip
+                    while ($zip_entry = zip_read($zip)) {
+                        // Get the name of the file inside the zip
+                        $filename = zip_entry_name($zip_entry);
+                        // Create the destination directory if it doesn't exist
+                        $dirname = dirname($this->destination_path . $filename);
+                        if (!is_dir($dirname)) {
+                            mkdir($dirname, 0755, true);
+                        }
+                        // Extract the file
+                        if (zip_entry_open($zip, $zip_entry, "r")) {
+                            $file_content = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+                            file_put_contents($this->destination_path . $filename, $file_content);
+                            zip_entry_close($zip_entry);
+                        }
+                    }
+                    zip_close($zip);
+                    echo $this->JSONResponse('1',"Zip file extracted successfully.");
+                    
+                } else {
+                    echo $this->JSONResponse('0',"Failed to open the zip file.");
+                }
+            } else {
+                echo $this->JSONResponse('0',"Failed to move the zip file.");
+            }
+    }
 
     public function CommonCURLRequest($query_params)
     {

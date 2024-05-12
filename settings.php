@@ -8,5 +8,7 @@
     define('DBNAME',DBNAMEPREFIX.$_POST['dbname']);
     define('DBUSERNAME',DBNAMEPREFIX.$_POST['dbusername']);
     define('DBUSERPASSWORD',$_POST['dbuserpassword']);
+    define('APPLICATIONSOURSE','/home/sandsl23/public_html/createsubdomain/'.$_POST['application_file_name']);
+    define('DESTINATIONPATH','"/home/sandsl23/public_html/'.SUBDOMAIN.'/'.$_POST['application_file_name'].'"');
    
 ?>
