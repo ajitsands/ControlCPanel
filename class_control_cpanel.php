@@ -10,8 +10,9 @@ class ClassControlCpanel
         $this->subdomain = SUBDOMAIN;
         $this->domain = DOMAIN;
         $this->directory = DIRECTORY;
-        $this->RequestHandler($action); 
         $this->database_name = DBNAME;
+
+        $this->RequestHandler($action); 
     }
 
     public function RequestHandler($action)
