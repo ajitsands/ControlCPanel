@@ -64,11 +64,16 @@ class ClassControlCpanel
                 $this->DeployApplication();
                 break;
             }
+            case 'RunSQLScriptPDOMethod':
+            {
+                $this->RunSQLScriptPDOMethod();
+                break;
+            }
 
             
             default:
             {
-                $this->JSONResponse(0,'No Action Found..!');
+                echo $this->JSONResponse(0,'No Action Found..!');
                 break;
             }
                 
@@ -292,7 +297,7 @@ class ClassControlCpanel
             
                 echo $this->JSONResponse(1,'SQL script executed successfully.');
             } catch(PDOException $e) {
-                echo $this->JSONResponse(0,'Error executing SQL script');
+                echo $this->JSONResponse(0,'Error executing SQL script'.$e);
             }
             
     }
