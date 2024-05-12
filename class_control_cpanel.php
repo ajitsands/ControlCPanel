@@ -230,7 +230,7 @@ class ClassControlCpanel
                         }
                     }
                     zip_close($zip);
-                    echo $this->JSONResponse('1',"Zip file extracted successfully.");
+                    echo $this->JSONResponse('1',"Selected package installed successfully..!");
                     
                 } else {
                     echo $this->JSONResponse('0',"Failed to open the zip file.");
