@@ -5,6 +5,7 @@ class ClassControlCpanel
     
     public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result;
     public $database_name,$database_username,$database_user_password;
+    public $servername,$sql_script_path;
     public $source_file,$destination_path;
     public function __construct($action) {
         $this->cpanel_username = CPANELUSERNAME ;
@@ -17,6 +18,9 @@ class ClassControlCpanel
         $this->database_user_password = DBUSERPASSWORD;
         $this->source_file = APPLICATIONSOURSE;
         $this->destination_path = DESTINATIONPATH;
+        $this->servername = "localhost";
+        $this->sql_script_path = MYSQLSCRIPTPATH;
+
 
         $this->RequestHandler($action); 
     }
@@ -60,6 +64,7 @@ class ClassControlCpanel
                 $this->DeployApplication();
                 break;
             }
+
             
             default:
             {
@@ -268,6 +273,49 @@ class ClassControlCpanel
         
        
     }
+    
+    public function RunSQLScriptPDOMethod()
+    {
+           
+            try {
+                // Create a new PDO instance
+                $pdo = new PDO("mysql:host=".$this->servername.";dbname=".$this->database_name.'"', $this->database_username,$this->database_user_password);
+                
+                // Set the PDO error mode to exception
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+                // Read SQL script file content
+                $sqlScript = file_get_contents($this->sql_script_path);
+            
+                // Execute the SQL script
+                $pdo->exec($sqlScript);
+            
+                echo $this->JSONResponse(1,'SQL script executed successfully.');
+            } catch(PDOException $e) {
+                echo $this->JSONResponse(0,'Error executing SQL script');
+            }
+            
+    }
+
+    public function RunSQLScriptMySQLiMethod()
+    {
+         // Database connection settings
+         
+         $conn = new mysqli($servername, $username, $password, $dbname);
+         if ($conn->connect_error) {
+             die("Connection failed: " . $conn->connect_error);
+         }
+         $sqlScript = file_get_contents($sqlScriptFile);
+         if ($conn->multi_query($sqlScript) === TRUE) {
+             echo $this->JSONResponse(1,'SQL script executed successfully.');
+         } else {
+             echo $this->JSONResponse(0,'Error executing SQL script');
+         }
+         $conn->close();
+
+    }
+
+
     public function JSONResponse($jsonresult, $reason)
     {
         $response = array(
@@ -277,6 +325,8 @@ class ClassControlCpanel
         $JSONOut = json_encode($response);
         return $JSONOut;
     }
+
+
     public function __destruct() {
        // echo "This is for Testing";
     }

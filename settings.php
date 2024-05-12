@@ -11,5 +11,6 @@
     define('APPLICATIONSOURSE','/home/sandsl23/public_html/createsubdomain/'.$_POST['application_file_name']);
     define('DESTINATIONPATH','/home/sandsl23/public_html/'.SUBDOMAIN.'/');
     define('APPLICATIONFILENAME',$_POST['application_file_name']);
+    define('MYSQLSCRIPTPATH','/home/sandsl23/public_html/createsubdomain/mysqlscript.sql');
    
 ?>
