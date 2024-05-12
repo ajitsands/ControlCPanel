@@ -3,7 +3,7 @@ include_once "settings.php";
 class ClassControlCpanel
 {
     
-    public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result,$database_name;
+    public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result,$database_name,$database_user,$database_user_password;
     public function __construct($action) {
         $this->cpanel_username = CPANELUSERNAME ;
         $this->cpanel_password = CPANELPASSWORD;
@@ -11,6 +11,7 @@ class ClassControlCpanel
         $this->domain = DOMAIN;
         $this->directory = DIRECTORY;
         $this->database_name = DBNAME;
+        $this->database_user_password = DBUSERPASSWORD;
 
         $this->RequestHandler($action); 
     }
@@ -37,6 +38,11 @@ class ClassControlCpanel
             case 'CreateNewDatabase':
             {
                 $this->CreateNewDatabase();
+                break;
+            }
+            case 'CreateNewDatabaseUser':
+            {
+                $this->CreateNewDatabaseUser();
                 break;
             }
             default:
@@ -141,6 +147,25 @@ class ClassControlCpanel
 
         echo $this->JSONResponse($event_result,$function);
     }
+
+    public function CreateNewDatabaseUser()
+    {
+        $query_params = array(
+            'cpanel_jsonapi_module' => 'MysqlFE',
+            'cpanel_jsonapi_func' => 'createdbuser',
+            'cpanel_jsonapi_version' => 2,
+            'name' => $this->database_user,
+            'password' => $this->database_user_password
+        );
+        $this->result = $this->CommonCURLRequest($query_params);
+        echo $this->result;
+        // $response_data = json_decode($this->result, true);
+        // $event_result = $response_data['cpanelresult']['event']['result'];
+        // $function = $response_data['cpanelresult']['func'];
+
+        // echo $this->JSONResponse($event_result,$function);
+    }
+
     public function CommonCURLRequest($query_params)
     {
         $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
