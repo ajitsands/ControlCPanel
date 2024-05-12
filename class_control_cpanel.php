@@ -299,7 +299,7 @@ class ClassControlCpanel
                  $query_params = array(
                     'cpanel_jsonapi_user' => $this->cpanel_username,
                     'cpanel_jsonapi_module' => 'MysqlFE',
-                    'cpanel_jsonapi_func' => 'db_run_sql',
+                    'cpanel_jsonapi_func' => 'sql',
                     'db' => $database_name,
                     'file' => $sql_script_file
                 );
@@ -312,12 +312,6 @@ class ClassControlCpanel
                 } else {
                     echo "Error executing SQL script: " . $api2_response['cpanelresult']['data'][0]['statusmsg'];
                 }
-
-
-                
-
-
-        
     }
 
     public function RunSQLScriptPDOMethod()
