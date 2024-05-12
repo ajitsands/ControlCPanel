@@ -69,7 +69,12 @@ class ClassControlCpanel
                 $this->RunSQLScriptPDOMethod();
                 break;
             }
-
+            case 'RunSQLScriptWithCPanel':
+            {
+                $this->RunSQLScriptWithCPanel();
+                break;
+            }
+            
             
             default:
             {
@@ -279,6 +284,55 @@ class ClassControlCpanel
        
     }
     
+
+    public function RunSQLScriptWithCPanel()
+    {
+        // cPanel database connection settings
+        $servername = "localhost"; // This may be different depending on your cPanel setup
+        $username = CPANELUSERNAME; // Your cPanel database username
+        $password = CPANELPASSWORD; // Your cPanel database password
+        $dbname = DBUSERNAME; // Your cPanel database name
+        
+        // SQL script file path
+        $sqlScriptFile = MYSQLSCRIPTPATH; // Update this path as per your setup
+        
+        // Read SQL script file content
+        $sqlScript = file_get_contents($sqlScriptFile);
+        
+        // Prepare cPanel JSON API request
+        $query_params = array(
+            'cpanel_jsonapi_version' => 2,
+            'cpanel_jsonapi_module' => 'MysqlFE',
+            'cpanel_jsonapi_func' => 'createdb', // Change this to the appropriate API function for your needs
+            'cpanel_jsonapi_apiversion' => 2,
+            'cpanel_jsonapi_username' => $username,
+            'cpanel_jsonapi_password' => $password,
+            'cpanel_jsonapi_params' => array(
+                'database' => $dbname,
+                'script' => $sqlScript // Pass the SQL script content as a parameter
+            )
+        );
+        
+        // Send request to cPanel JSON API
+        $this->result = $this->CommonCURLRequest($query_params);
+        echo $this->result;
+        
+        // Handle response from cPanel JSON API
+        if ($this->result !== false) {
+            // Process API response
+            $jsonResponse = json_decode($this->result, true);
+            // Check if the API call was successful
+            if (isset($jsonResponse['cpanelresult']['data']['result']) && $jsonResponse['cpanelresult']['data']['result'] == 1) {
+                echo "SQL script executed successfully.";
+            } else {
+                echo "Error executing SQL script: " . $jsonResponse['cpanelresult']['data']['reason'];
+            }
+        } else {
+            echo "Failed to communicate";
+        }
+        
+    }
+
     public function RunSQLScriptPDOMethod()
     {
            
