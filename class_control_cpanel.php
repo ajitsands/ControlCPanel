@@ -209,9 +209,9 @@ class ClassControlCpanel
     public function DeployApplication()
     {
         // Move the zip file to the destination folder
-            if (copy($this->source_file, $this->destination_path)) {
+            if (copy($this->source_file, $this->destination_path.APPLICATIONFILENAME)) {
                 // Open the zip file
-                $zip = zip_open($this->destination_path);
+                $zip = zip_open($this->destination_path.APPLICATIONFILENAME);
                 if ($zip) {
                     // Extract each file from the zip
                     while ($zip_entry = zip_read($zip)) {
