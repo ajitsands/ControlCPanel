@@ -298,8 +298,7 @@ class ClassControlCpanel
                 // Construct the API call parameters
                 $api2_parameters = array(
                     'db' => $database_name,
-                    'file' => $sql_script_file,
-                    'name' => DBUSERNAME
+                    'file' => $sql_script_file
                 );
 
                 // cPanel API 2 call
