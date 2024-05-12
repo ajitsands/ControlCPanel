@@ -139,7 +139,7 @@ class ClassControlCpanel
         $event_result = $response_data['cpanelresult']['event']['result'];
         $function = $response_data['cpanelresult']['func'];
 
-        echo $this->JSONResponse($function,$event_result);
+        echo $this->JSONResponse($event_result,$function);
     }
     public function CommonCURLRequest($query_params)
     {
