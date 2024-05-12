@@ -118,6 +118,18 @@ class ClassControlCpanel
 
 
     }
+
+    public function CreateNewDatabase()
+    {
+        $query_params = array(
+            'cpanel_jsonapi_module' => 'MysqlFE',
+            'cpanel_jsonapi_func' => 'createdb',
+            'cpanel_jsonapi_version' => 2,
+            'db' => $database_name
+        );
+        $this->result = $this->CreateNewDatabase($query_params);
+        echo $this->result;
+    }
     public function CommonCURLRequest($query_params)
     {
         $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
