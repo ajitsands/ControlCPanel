@@ -195,9 +195,6 @@ class ClassControlCpanel
         $event_result = $response_data['cpanelresult']['event']['result'];
         $event_reason = $response_data['cpanelresult']['event']['reason'];
 
-        // $event_result = $response_data['cpanelresult']['event']['result'];
-        // $function = $response_data['cpanelresult']['func'];
-
         echo $this->JSONResponse($event_result,$event_reason);
     }
 
