@@ -154,6 +154,7 @@ class ClassControlCpanel
     {
        
         $post_data = array(
+            'cpanel_jsonapi_user' => $this->cpanel_username,
             'cpanel_jsonapi_module' => 'MysqlFE',
             'cpanel_jsonapi_func' => 'createdbuser',
             'dbuser' => $this->database_username,
