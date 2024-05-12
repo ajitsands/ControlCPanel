@@ -3,7 +3,7 @@ include_once "settings.php";
 class ClassControlCpanel
 {
     
-    public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result;
+    public $cpanel_username,$cpanel_password,$subdomain,$domain,$directory,$result,$database_name;
     public function __construct($action) {
         $this->cpanel_username = CPANELUSERNAME ;
         $this->cpanel_password = CPANELPASSWORD;
@@ -11,6 +11,7 @@ class ClassControlCpanel
         $this->domain = DOMAIN;
         $this->directory = DIRECTORY;
         $this->RequestHandler($action); 
+        $this->database_name = DBNAME;
     }
 
     public function RequestHandler($action)
