@@ -74,7 +74,11 @@ class ClassControlCpanel
                 $this->RunSQLScriptWithCPanel();
                 break;
             }
-            
+            case 'RunSQLScriptMySQLiMethod':
+            {
+                $this->RunSQLScriptMySQLiMethod();
+                break;
+            }
             
             default:
             {
