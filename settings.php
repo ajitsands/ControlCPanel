@@ -6,7 +6,7 @@
     define('DIRECTORY','/public_html/'.SUBDOMAIN);
     define('DBNAMEPREFIX','sandsl23_');
     define('DBNAME',DBNAMEPREFIX.$_POST['dbname']);
-    define('DBUSERNAME',$_POST['dbusername']);
+    define('DBUSERNAME',DBNAMEPREFIX.$_POST['dbusername']);
     define('DBUSERPASSWORD',$_POST['dbuserpassword']);
    
 ?>
