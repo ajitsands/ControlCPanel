@@ -132,7 +132,7 @@ class ClassControlCpanel
             'cpanel_jsonapi_module' => 'MysqlFE',
             'cpanel_jsonapi_func' => 'createdb',
             'cpanel_jsonapi_version' => 2,
-            'db' => $database_name
+            'db' => $this->database_name
         );
         $this->result = $this->CommonCURLRequest($query_params);
         echo $this->result;
