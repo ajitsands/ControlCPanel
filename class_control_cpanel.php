@@ -341,7 +341,39 @@ class ClassControlCpanel
     public function BackupMySQLDatabase()
     {
        
-            echo "SAMPLE DATA";
+            // Database details
+            $host = 'localhost';
+            $username = DBUSERNAME;
+            $password = DBUSERPASSWORD;
+            $database = DBNAME;
+
+            // Backup directory
+            $backup_dir = DBBACKUPPATH;
+
+            // Connect to MySQL server
+            $conn = mysqli_connect($host, $username, $password, $database);
+
+            // Check connection
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
+            }
+
+            // Backup filename
+            $backup_file = $backup_dir . $database . '-' . date('Y-m-d_H-i-s') . '.sql';
+
+            // Export database
+            $command = "mysqldump --user=$username --password=$password --host=$host $database > $backup_file";
+            exec($command, $output, $return_var);
+
+            // Check if backup was successful
+            if ($return_var === 0) {
+                echo "Database backup successful. Backup file: $backup_file";
+            } else {
+                echo "Database backup failed.";
+            }
+
+            // Close MySQL connection
+            mysqli_close($conn);
     }
 
 
