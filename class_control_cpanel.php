@@ -354,6 +354,7 @@ class ClassControlCpanel
 
             // API request data
             $data = array(
+                'cpanel_jsonapi_module' => 'FullBackup',
                 'module' => 'FullBackup',
                 'function' => 'fullbackup',
                 'type' => 'mysql',
