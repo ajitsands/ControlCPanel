@@ -296,11 +296,14 @@ class ClassControlCpanel
                 
                  $query_params = array(
 					'cpanel_jsonapi_user' => DBUSERNAME,
-					'cpanel_jsonapi_apiversion' => 2,
 					'cpanel_jsonapi_module' => 'Mysql',
-					'cpanel_jsonapi_func' => 'dbquery',
-					'db' => DBNAME,
-					'sql' => file_get_contents(MYSQLSCRIPTPATH)
+					'cpanel_jsonapi_func' => 'uapi',
+					'cpanel_jsonapi_module2' => 'MysqlFE',
+					'cpanel_jsonapi_func2' => 'execute_query',
+					'arguments' => json_encode(array(
+						'database' => DBNAME,
+						'sql' => file_get_contents(MYSQLSCRIPTPATH)
+					))
 				);
 
                 $this->result = $this->CommonCURLRequest($query_params);
