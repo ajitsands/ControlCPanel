@@ -298,6 +298,7 @@ class ClassControlCpanel
 					'cpanel_jsonapi_user' => CPANELUSERNAME,
 					'cpanel_jsonapi_apiversion' => 2,
 					'cpanel_jsonapi_module' => 'cpanel',
+					'cpanel_jsonapi_func' => 'execute_query',
 					'cpanel_jsonapi_module2' => 'MysqlFE',
 					'cpanel_jsonapi_func2' => 'execute_query',
 					'arguments' => json_encode(array(
