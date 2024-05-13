@@ -352,7 +352,7 @@ class ClassControlCpanel
             // Backup directory
             $backup_dir = DBBACKUPPATH;
 
-            // Connect to MySQL server
+                        // Connect to MySQL server
             $conn = mysqli_connect($host, $username, $password, $database);
 
             // Check connection
@@ -363,36 +363,46 @@ class ClassControlCpanel
             // Backup filename
             $backup_file = $backup_dir . $database . '-' . date('Y-m-d_H-i-s') . '.sql';
 
-            // Fetch database structure and data
-            $sql = "SHOW TABLES";
-            $tables_result = mysqli_query($conn, $sql);
+            // Open backup file for writing
+            $backup_handle = fopen($backup_file, 'w');
+
+            // Retrieve list of tables
+            $tables_sql = "SHOW TABLES";
+            $tables_result = mysqli_query($conn, $tables_sql);
 
             if (!$tables_result) {
                 die("Error fetching tables: " . mysqli_error($conn));
             }
 
-            // Open backup file for writing
-            $backup_handle = fopen($backup_file, 'w');
-
             // Loop through tables and export structure and data
-            while ($row = mysqli_fetch_row($tables_result)) {
-                $table = $row[0];
-                
+            while ($table_row = mysqli_fetch_row($tables_result)) {
+                $table_name = $table_row[0];
+
                 // Export table structure
-                fwrite($backup_handle, "### Table structure for table `$table` ###\n");
-                $structure_sql = "SHOW CREATE TABLE $table";
+                $structure_sql = "SHOW CREATE TABLE $table_name";
                 $structure_result = mysqli_query($conn, $structure_sql);
+
+                if (!$structure_result) {
+                    die("Error fetching structure for table $table_name: " . mysqli_error($conn));
+                }
+
                 $structure_row = mysqli_fetch_row($structure_result);
                 fwrite($backup_handle, $structure_row[1] . ";\n\n");
-                
+
                 // Export table data
-                fwrite($backup_handle, "### Data for table `$table` ###\n");
-                $data_sql = "SELECT * FROM $table";
+                $data_sql = "SELECT * FROM $table_name";
                 $data_result = mysqli_query($conn, $data_sql);
-                while ($data_row = mysqli_fetch_assoc($data_result)) {
-                    $values = implode("', '", array_map('mysqli_real_escape_string', $conn, $data_row));
-                    fwrite($backup_handle, "INSERT INTO `$table` VALUES ('$values');\n");
+
+                if (!$data_result) {
+                    die("Error fetching data for table $table_name: " . mysqli_error($conn));
                 }
+
+                while ($data_row = mysqli_fetch_assoc($data_result)) {
+                    $values = array_map('mysqli_real_escape_string', array_values($data_row));
+                    $values = "'" . implode("', '", $values) . "'";
+                    fwrite($backup_handle, "INSERT INTO $table_name VALUES ($values);\n");
+                }
+
                 fwrite($backup_handle, "\n");
             }
 
