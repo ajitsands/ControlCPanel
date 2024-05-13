@@ -347,6 +347,8 @@ class ClassControlCpanel
             $password = DBUSERPASSWORD;
             $database = DBNAME;
 
+          
+
             // Backup directory
             $backup_dir = DBBACKUPPATH;
 
@@ -361,20 +363,47 @@ class ClassControlCpanel
             // Backup filename
             $backup_file = $backup_dir . $database . '-' . date('Y-m-d_H-i-s') . '.sql';
 
-            // Export database
-            $command = "mysqldump --user=$username --password=$password --host=$host $database > $backup_file";
-           
-            exec($command, $output, $return_var);
-            echo $return_var ;
-            // Check if backup was successful
-            if ($return_var === 0) {
-                echo "Database backup successful. Backup file: $backup_file";
-            } else {
-                echo "Database backup failed. Error: " . implode("\n", $output);
+            // Fetch database structure and data
+            $sql = "SHOW TABLES";
+            $tables_result = mysqli_query($conn, $sql);
+
+            if (!$tables_result) {
+                die("Error fetching tables: " . mysqli_error($conn));
             }
+
+            // Open backup file for writing
+            $backup_handle = fopen($backup_file, 'w');
+
+            // Loop through tables and export structure and data
+            while ($row = mysqli_fetch_row($tables_result)) {
+                $table = $row[0];
+                
+                // Export table structure
+                fwrite($backup_handle, "### Table structure for table `$table` ###\n");
+                $structure_sql = "SHOW CREATE TABLE $table";
+                $structure_result = mysqli_query($conn, $structure_sql);
+                $structure_row = mysqli_fetch_row($structure_result);
+                fwrite($backup_handle, $structure_row[1] . ";\n\n");
+                
+                // Export table data
+                fwrite($backup_handle, "### Data for table `$table` ###\n");
+                $data_sql = "SELECT * FROM $table";
+                $data_result = mysqli_query($conn, $data_sql);
+                while ($data_row = mysqli_fetch_assoc($data_result)) {
+                    $values = implode("', '", array_map('mysqli_real_escape_string', $conn, $data_row));
+                    fwrite($backup_handle, "INSERT INTO `$table` VALUES ('$values');\n");
+                }
+                fwrite($backup_handle, "\n");
+            }
+
+            // Close backup file
+            fclose($backup_handle);
 
             // Close MySQL connection
             mysqli_close($conn);
+
+            echo "Database backup successful. Backup file: $backup_file";
+    
     }
 
 
