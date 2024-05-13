@@ -293,16 +293,15 @@ class ClassControlCpanel
     {
 
                 // Database connection settings
-                $database_name = DBNAME;
-                $sql_script_file = MYSQLSCRIPTPATH;
                 
                  $query_params = array(
-                    'cpanel_jsonapi_user' => $this->database_username,
-                    'cpanel_jsonapi_module' => 'MysqlFE',
-                    'cpanel_jsonapi_func' => 'runsql',
-                    'db' => $database_name,
-                    'file' => $sql_script_file
-                );
+					'cpanel_jsonapi_user' => DBUSERNAME,
+					'cpanel_jsonapi_apiversion' => 2,
+					'cpanel_jsonapi_module' => 'MysqlFE',
+					'cpanel_jsonapi_func' => 'execute_sql',
+					'db' => DBNAME,
+					'sql' => file_get_contents(MYSQLSCRIPTPATH)
+				);
 
                 $this->result = $this->CommonCURLRequest($query_params);
                 echo $this->result;
