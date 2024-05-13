@@ -340,56 +340,41 @@ class ClassControlCpanel
 
     public function BackupMySQLDatabase()
     {
+        require_once "/usr/local/cpanel/php/cpanel.php";
+
         // cPanel details
-            $cpanel_host = DOMAIN;
-            $cpanel_username = CPANELUSERNAME;
-            $cpanel_api_token = APITOKEN;
-
-            // Database details
-            $db_name = DBNAME;
-            $backup_dir = DBBACKUPPATH;
-
-            // cPanel API URL
-            $cpanel_api_url = "https://$cpanel_host:2083/json-api/cpanel";
-
-            // API request data
-            $data = array(
-                'cpanel_jsonapi_module' => 'Backup',
-                'cpanel_jsonapi_func' => 'fullbackup',
-                'type' => 'mysql',
-                'dest' => $backup_dir,
-                'email' => 'ajitsands@gmail.com',
-                'db' => $db_name
-            );
-
-            // Convert data to JSON
-            $post_data = json_encode($data);
-
-            // cURL request to cPanel API
-            $ch = curl_init($cpanel_api_url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: cpanel ' . $cpanel_username . ':' . $cpanel_api_token));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-            $response = curl_exec($ch);
-
-            // Check for errors
-            if($response === false) {
-                echo 'Error: ' . curl_error($ch);
-            } else {
-                // Decode JSON response
-                $json_response = json_decode($response, true);
-                
-                // Check if backup was successful
-                if(isset($json_response['result'][0]['status']) && $json_response['result'][0]['status'] == 1) {
-                    echo "Backup successful!";
-                } else {
-                    echo "Backup failed: " . $response;
-                }
-            }
-
-            // Close cURL handle
-            curl_close($ch);
+        $cpanel_host = DOMAIN;
+        $cpanel_username = CPANELUSERNAME;
+        $cpanel_password = CPANELPASSWORD; // This is your cPanel password, not the API token
+        
+        // Database details
+        $db_name = DBNAME;
+        $backup_dir = DBBACKUPPATH;
+        
+        // Initialize CPANEL object
+        $cpanel = new CPANEL([
+            'host' => $cpanel_host,
+            'username' => $cpanel_username,
+            'password' => $cpanel_password,
+        ]);
+        
+        // API request data
+        $args = array(
+            'type' => 'mysql',
+            'dest' => $backup_dir,
+            'email' => 'ajitsands@gmail.com',
+            'db' => $db_name
+        );
+        
+        // Make API request to create database backup
+        $result = $cpanel->uapi('Backup', 'fullbackup', $args);
+        
+        // Check result
+        if ($result['status'] == 1) {
+            echo "Backup successful!";
+        } else {
+            echo "Backup failed: " . $result['errors'][0]['message'];
+        }
     }
 
 
