@@ -341,7 +341,7 @@ class ClassControlCpanel
     public function BackupMySQLDatabase()
     {
        
-
+            echo "SAMPLE DATA";
     }
 
 
