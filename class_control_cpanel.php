@@ -340,20 +340,8 @@ class ClassControlCpanel
 
     public function BackupMySQLDatabase()
     {
-       // Instantiate the CPANEL object.
-        require_once "/usr/local/cpanel/php/cpanel.php";
+       
 
-        // Connect to cPanel - only do this once.
-        $cpanel = new CPANEL();
-
-        // Get domain user data.
-        $get_userdata = $cpanel->uapi(
-            'DomainInfo', 'domains_data',
-            array(
-                'format'    => 'hash',
-            )
-        );
-        
     }
 
 
