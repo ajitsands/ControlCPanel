@@ -295,8 +295,9 @@ class ClassControlCpanel
                 // Database connection settings
                 
                  $query_params = array(
-					'cpanel_jsonapi_user' => DBUSERNAME,
-					'cpanel_jsonapi_module' => 'Mysql',
+					'cpanel_jsonapi_user' => CPANELUSERNAME,
+					'cpanel_jsonapi_apiversion' => 2,
+					'cpanel_jsonapi_module' => 'cpanel',
 					'cpanel_jsonapi_func' => 'uapi',
 					'cpanel_jsonapi_module2' => 'MysqlFE',
 					'cpanel_jsonapi_func2' => 'execute_query',
