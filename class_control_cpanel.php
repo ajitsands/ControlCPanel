@@ -297,8 +297,8 @@ class ClassControlCpanel
                  $query_params = array(
 					'cpanel_jsonapi_user' => CPANELUSERNAME,
 					'cpanel_jsonapi_apiversion' => 2,
-					'cpanel_jsonapi_module' => 'cpanel',
-					'cpanel_jsonapi_func' => 'module_features',
+					'cpanel_jsonapi_module' => 'MysqlFE',
+					'cpanel_jsonapi_func' => 'applist',
 					'module' => 'MysqlFE'
 				);
 
