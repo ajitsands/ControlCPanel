@@ -369,7 +369,7 @@ class ClassControlCpanel
             if ($return_var === 0) {
                 echo "Database backup successful. Backup file: $backup_file";
             } else {
-                echo "Database backup failed.";
+                echo "Database backup failed. Error: " . implode("\n", $output);
             }
 
             // Close MySQL connection
