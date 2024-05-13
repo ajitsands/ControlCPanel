@@ -264,30 +264,7 @@ class ClassControlCpanel
         }
         
     }
-
-    public function CommonCURLRequest($query_params)
-    {
-        $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
-       
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_URL, $query);
-        curl_setopt($curl, CURLOPT_USERPWD, "$this->cpanel_username:$this->cpanel_password");
-        
-        $result = curl_exec($curl);
-        curl_close($curl);
-        if ($result === false) {
-            //error_log("cURL error: " . curl_error($curl));
-            echo $this->JSONResponse(0,"cURL error: " . curl_error($curl));
-        } else {
-
-           return $result;
-        }
-        
-        
-       
-    }
-    
+   
 
     public function RunSQLScriptWithCPanel()
     {
@@ -356,6 +333,30 @@ class ClassControlCpanel
 
     }
 
+
+    public function CommonCURLRequest($query_params)
+    {
+        $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
+       
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_URL, $query);
+        curl_setopt($curl, CURLOPT_USERPWD, "$this->cpanel_username:$this->cpanel_password");
+        
+        $result = curl_exec($curl);
+        curl_close($curl);
+        if ($result === false) {
+            //error_log("cURL error: " . curl_error($curl));
+            echo $this->JSONResponse(0,"cURL error: " . curl_error($curl));
+        } else {
+
+           return $result;
+        }
+        
+        
+       
+    }
+    
 
     public function JSONResponse($jsonresult, $reason)
     {
