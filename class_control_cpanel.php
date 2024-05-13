@@ -333,7 +333,6 @@ class ClassControlCpanel
 
     }
 
-
     public function CommonCURLRequest($query_params)
     {
         $query = "https://$this->domain:2083/json-api/cpanel?" . http_build_query($query_params);
@@ -357,7 +356,6 @@ class ClassControlCpanel
        
     }
     
-
     public function JSONResponse($jsonresult, $reason)
     {
         $response = array(
