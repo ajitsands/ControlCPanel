@@ -12,5 +12,8 @@
     define('DESTINATIONPATH','/home/sandsl23/public_html/'.SUBDOMAIN.'/');
     define('APPLICATIONFILENAME',$_POST['application_file_name']);
     define('MYSQLSCRIPTPATH','/home/sandsl23/public_html/createsubdomain/sapphire_innovate_staging.sql');
+    define('APITOKEN','WUDD24U0NJ3KGBKTN7XZX8CX5JZ9YY72');
+    define('DBBACKUPPATH','/home/sandsl23/public_html/createsubdomain/');
+   
    
 ?>

@@ -79,6 +79,11 @@ class ClassControlCpanel
                 $this->RunSQLScriptMySQLiMethod();
                 break;
             }
+            case 'BackupMySQLDatabase':
+            {
+                $this->BackupMySQLDatabase();
+                break;
+            }
             
             default:
             {
@@ -332,6 +337,61 @@ class ClassControlCpanel
          $conn->close();
 
     }
+
+    public function BackupMySQLDatabase()
+    {
+        // cPanel details
+            $cpanel_host = DOMAIN;
+            $cpanel_username = CPANELUSERNAME;
+            $cpanel_api_token = APITOKEN;
+
+            // Database details
+            $db_name = DBNAME;
+            $backup_dir = DBBACKUPPATH;
+
+            // cPanel API URL
+            $cpanel_api_url = "https://$cpanel_host:2083/json-api/cpanel";
+
+            // API request data
+            $data = array(
+                'module' => 'FullBackup',
+                'function' => 'fullbackup',
+                'type' => 'mysql',
+                'dest' => $backup_dir,
+                'email' => 'your@email.com',
+                'db' => $db_name
+            );
+
+            // Convert data to JSON
+            $post_data = json_encode($data);
+
+            // cURL request to cPanel API
+            $ch = curl_init($cpanel_api_url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: cpanel ' . $cpanel_username . ':' . $cpanel_api_token));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+            $response = curl_exec($ch);
+
+            // Check for errors
+            if($response === false) {
+                echo 'Error: ' . curl_error($ch);
+            } else {
+                // Decode JSON response
+                $json_response = json_decode($response, true);
+                
+                // Check if backup was successful
+                if(isset($json_response['result'][0]['status']) && $json_response['result'][0]['status'] == 1) {
+                    echo "Backup successful!";
+                } else {
+                    echo "Backup failed: " . $json_response['reason'];
+                }
+            }
+
+            // Close cURL handle
+            curl_close($ch);
+    }
+
 
     public function CommonCURLRequest($query_params)
     {
