@@ -318,20 +318,18 @@ class ClassControlCpanel
     {
            
             try {
-                // Create a new PDO instance
-                //$pdo = new PDO("mysql:host=".$this->servername.";dbname=".$this->database_name.'"', $this->database_username,$this->database_user_password);
-				$pdo = new PDO("mysql:host=localhost;dbname=sandsl23_my_new_database_from, sandsl23_newPostmanUser,S@nds1@b");
-                
-                // Set the PDO error mode to exception
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                 // Create a new PDO instance
+					$pdo = new PDO($this->servername, DBUSERNAME, DBUSERPASSWORD);
+					// Set PDO error mode to exception
+					$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+					// Read SQL script from file
+					$sqlScript = file_get_contents(MYSQLSCRIPTPATH);
+
+					// Execute SQL script
+					$pdo->exec($sqlScript);
             
-                // Read SQL script file content
-                $sqlScript = file_get_contents($this->sql_script_path);
-            
-                // Execute the SQL script
-                $pdo->exec($sqlScript);
-            
-                echo $this->JSONResponse(1,'SQL script executed successfully.');
+					echo $this->JSONResponse(1,'SQL script executed successfully.');
             } catch(PDOException $e) {
                 echo $this->JSONResponse(0,'Error executing SQL script'.$e);
             }
@@ -350,7 +348,6 @@ class ClassControlCpanel
              die("Connection failed: " . $conn->connect_error);
          }
          $sqlScript = file_get_contents($this->sql_script_path);
-		 echo "Script : ".$sqlScript;
          if ($conn->multi_query($sqlScript) === TRUE) {
              echo $this->JSONResponse(1,'SQL script executed successfully.');
          } else {
