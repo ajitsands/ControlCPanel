@@ -340,41 +340,20 @@ class ClassControlCpanel
 
     public function BackupMySQLDatabase()
     {
+       // Instantiate the CPANEL object.
         require_once "/usr/local/cpanel/php/cpanel.php";
 
-        // cPanel details
-        $cpanel_host = DOMAIN;
-        $cpanel_username = CPANELUSERNAME;
-        $cpanel_password = CPANELPASSWORD; // This is your cPanel password, not the API token
-        
-        // Database details
-        $db_name = DBNAME;
-        $backup_dir = DBBACKUPPATH;
-        
-        // Initialize CPANEL object
-        $cpanel = new CPANEL([
-            'host' => $cpanel_host,
-            'username' => $cpanel_username,
-            'password' => $cpanel_password,
-        ]);
-        
-        // API request data
-        $args = array(
-            'type' => 'mysql',
-            'dest' => $backup_dir,
-            'email' => 'ajitsands@gmail.com',
-            'db' => $db_name
+        // Connect to cPanel - only do this once.
+        $cpanel = new CPANEL();
+
+        // Get domain user data.
+        $get_userdata = $cpanel->uapi(
+            'DomainInfo', 'domains_data',
+            array(
+                'format'    => 'hash',
+            )
         );
         
-        // Make API request to create database backup
-        $result = $cpanel->uapi('Backup', 'fullbackup', $args);
-        
-        // Check result
-        if ($result['status'] == 1) {
-            echo "Backup successful!";
-        } else {
-            echo "Backup failed: " . $result['errors'][0]['message'];
-        }
     }
 
 
