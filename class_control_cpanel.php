@@ -364,8 +364,8 @@ class ClassControlCpanel
             // Export database
             $command = "mysqldump --user=$username --password=$password --host=$host $database > $backup_file";
            
-            $err = exec($command, $output, $return_var);
-            echo $err ;
+            exec($command, $output, $return_var);
+            echo $return_var ;
             // Check if backup was successful
             if ($return_var === 0) {
                 echo "Database backup successful. Backup file: $backup_file";
