@@ -319,7 +319,8 @@ class ClassControlCpanel
            
             try {
                  // Create a new PDO instance
-					$pdo = new PDO($this->servername, DBUSERNAME, DBUSERPASSWORD);
+					$dsn = "mysql:host=".$this->servername.";dbname=".DBNAME;
+					$pdo = new PDO($dsn, DBUSERNAME, DBUSERPASSWORD);
 					// Set PDO error mode to exception
 					$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
