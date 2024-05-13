@@ -352,67 +352,73 @@ class ClassControlCpanel
             // Backup directory
             $backup_dir = DBBACKUPPATH;
 
-                        // Connect to MySQL server
-            $conn = mysqli_connect($host, $username, $password, $database);
+                // Connect to MySQL server
+                $conn = mysqli_connect($host, $username, $password, $database);
 
-            // Check connection
-            if (!$conn) {
-                die("Connection failed: " . mysqli_connect_error());
-            }
-
-            // Backup filename
-            $backup_file = $backup_dir . $database . '-' . date('Y-m-d_H-i-s') . '.sql';
-
-            // Open backup file for writing
-            $backup_handle = fopen($backup_file, 'w');
-
-            // Retrieve list of tables
-            $tables_sql = "SHOW TABLES";
-            $tables_result = mysqli_query($conn, $tables_sql);
-
-            if (!$tables_result) {
-                die("Error fetching tables: " . mysqli_error($conn));
-            }
-
-            // Loop through tables and export structure and data
-            while ($table_row = mysqli_fetch_row($tables_result)) {
-                $table_name = $table_row[0];
-
-                // Export table structure
-                $structure_sql = "SHOW CREATE TABLE $table_name";
-                $structure_result = mysqli_query($conn, $structure_sql);
-
-                if (!$structure_result) {
-                    die("Error fetching structure for table $table_name: " . mysqli_error($conn));
+                // Check connection
+                if (!$conn) {
+                    die("Connection failed: " . mysqli_connect_error());
                 }
 
-                $structure_row = mysqli_fetch_row($structure_result);
-                fwrite($backup_handle, $structure_row[1] . ";\n\n");
+                // Backup filename
+                $backup_file = $backup_dir . $database . '-' . date('Y-m-d_H-i-s') . '.sql';
 
-                // Export table data
-                $data_sql = "SELECT * FROM $table_name";
-                $data_result = mysqli_query($conn, $data_sql);
+                // Open backup file for writing
+                $backup_handle = fopen($backup_file, 'w');
 
-                if (!$data_result) {
-                    die("Error fetching data for table $table_name: " . mysqli_error($conn));
+                // Retrieve list of tables
+                $tables_sql = "SHOW TABLES";
+                $tables_result = mysqli_query($conn, $tables_sql);
+
+                if (!$tables_result) {
+                    die("Error fetching tables: " . mysqli_error($conn));
                 }
 
-                while ($data_row = mysqli_fetch_assoc($data_result)) {
-                    $values = array_map('mysqli_real_escape_string', array_values($data_row));
-                    $values = "'" . implode("', '", $values) . "'";
-                    fwrite($backup_handle, "INSERT INTO $table_name VALUES ($values);\n");
+                // Loop through tables and export structure and data
+                while ($table_row = mysqli_fetch_row($tables_result)) {
+                    $table_name = $table_row[0];
+
+                    // Export table structure
+                    $structure_sql = "SHOW CREATE TABLE $table_name";
+                    $structure_result = mysqli_query($conn, $structure_sql);
+
+                    if (!$structure_result) {
+                        die("Error fetching structure for table $table_name: " . mysqli_error($conn));
+                    }
+
+                    $structure_row = mysqli_fetch_row($structure_result);
+                    fwrite($backup_handle, $structure_row[1] . ";\n\n");
+
+                    // Export table data
+                    $data_sql = "SELECT * FROM $table_name";
+                    $data_result = mysqli_query($conn, $data_sql);
+
+                    if (!$data_result) {
+                        die("Error fetching data for table $table_name: " . mysqli_error($conn));
+                    }
+
+                    while ($data_row = mysqli_fetch_assoc($data_result)) {
+                        // Filter out columns with empty or default values
+                        $filtered_data = array_filter($data_row, function($value) {
+                            return $value !== '' && $value !== null;
+                        });
+
+                        $columns = implode(', ', array_keys($filtered_data));
+                        $values = "'" . implode("', '", array_map('mysqli_real_escape_string', array_values($filtered_data))) . "'";
+
+                        fwrite($backup_handle, "INSERT INTO $table_name ($columns) VALUES ($values);\n");
+                    }
+
+                    fwrite($backup_handle, "\n");
                 }
 
-                fwrite($backup_handle, "\n");
-            }
+                // Close backup file
+                fclose($backup_handle);
 
-            // Close backup file
-            fclose($backup_handle);
+                // Close MySQL connection
+                mysqli_close($conn);
 
-            // Close MySQL connection
-            mysqli_close($conn);
-
-            echo "Database backup successful. Backup file: $backup_file";
+                echo "Database backup successful. Backup file: $backup_file";
     
     }
 
