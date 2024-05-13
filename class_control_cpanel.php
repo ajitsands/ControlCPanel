@@ -319,7 +319,8 @@ class ClassControlCpanel
            
             try {
                 // Create a new PDO instance
-                $pdo = new PDO("mysql:host=".$this->servername.";dbname=".$this->database_name.'"', $this->database_username,$this->database_user_password);
+                //$pdo = new PDO("mysql:host=".$this->servername.";dbname=".$this->database_name.'"', $this->database_username,$this->database_user_password);
+				$pdo = new PDO("mysql:host=localhost;dbname=sandsl23_my_new_database_from, sandsl23_newPostmanUser,S@nds1@b");
                 
                 // Set the PDO error mode to exception
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
