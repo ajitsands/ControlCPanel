@@ -349,7 +349,7 @@ class ClassControlCpanel
          if ($conn->connect_error) {
              die("Connection failed: " . $conn->connect_error);
          }
-         $sqlScript = file_get_contents($sqlScriptFile);
+         $sqlScript = file_get_contents($this->sql_script_path);
 		 echo "Script : ".$sqlScript;
          if ($conn->multi_query($sqlScript) === TRUE) {
              echo $this->JSONResponse(1,'SQL script executed successfully.');
