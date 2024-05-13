@@ -384,7 +384,7 @@ class ClassControlCpanel
                 if(isset($json_response['result'][0]['status']) && $json_response['result'][0]['status'] == 1) {
                     echo "Backup successful!";
                 } else {
-                    echo "Backup failed: " . $json_response['reason'];
+                    echo "Backup failed: " . $response;
                 }
             }
 
