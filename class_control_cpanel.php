@@ -297,7 +297,7 @@ class ClassControlCpanel
                 $sql_script_file = MYSQLSCRIPTPATH;
                 
                  $query_params = array(
-                    'cpanel_jsonapi_user' => $this->cpanel_username,
+                    'cpanel_jsonapi_user' => $this->database_username,
                     'cpanel_jsonapi_module' => 'MysqlFE',
                     'cpanel_jsonapi_func' => 'runsql',
                     'db' => $database_name,
