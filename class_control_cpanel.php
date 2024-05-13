@@ -354,12 +354,11 @@ class ClassControlCpanel
 
             // API request data
             $data = array(
-                'cpanel_jsonapi_module' => 'FullBackup',
-                'module' => 'FullBackup',
-                'function' => 'fullbackup',
+                'cpanel_jsonapi_module' => 'Backup',
+                'cpanel_jsonapi_func' => 'fullbackup',
                 'type' => 'mysql',
                 'dest' => $backup_dir,
-                'email' => 'your@email.com',
+                'email' => 'ajitsands@gmail.com',
                 'db' => $db_name
             );
 
